@@ -1,0 +1,42 @@
+# 1. Define Variables
+RG_NAME="raziel-CoreServicesVnet"
+LOCATION="eastus"
+VNET_NAME="CoreServicesVnet"
+
+# 2. Create the Resource Group
+echo "Creating Resource Group: $RG_NAME..."
+az group create --name $RG_NAME --location $LOCATION
+
+# 3. Create VNet and the first subnet (GatewaySubnet)
+echo "Creating VNet and GatewaySubnet..."
+az network vnet create \
+  --name $VNET_NAME \
+  --resource-group $RG_NAME \
+  --location $LOCATION \
+  --address-prefixes 10.20.0.0/16 \
+  --subnet-name GatewaySubnet \
+  --subnet-prefixes 10.20.0.0/27
+
+# 4. Create additional subnets
+echo "Creating DatabaseSubnet..."
+az network vnet subnet create \
+  --name DatabaseSubnet \
+  --resource-group $RG_NAME \
+  --vnet-name $VNET_NAME \
+  --address-prefixes 10.20.20.0/24
+
+echo "Creating SharedServicesSubnet..."
+az network vnet subnet create \
+  --name SharedServicesSubnet \
+  --resource-group $RG_NAME \
+  --vnet-name $VNET_NAME \
+  --address-prefixes 10.20.10.0/24
+
+echo "Creating PublicWebServicesSubnet..."
+az network vnet subnet create \
+  --name PublicWebServicesSubnet \
+  --resource-group $RG_NAME \
+  --vnet-name $VNET_NAME \
+  --address-prefixes 10.20.30.0/24
+
+echo "Deployment Complete!"

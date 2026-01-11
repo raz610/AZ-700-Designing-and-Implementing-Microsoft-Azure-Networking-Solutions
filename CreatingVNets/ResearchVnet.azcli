@@ -1,0 +1,23 @@
+# 1. Define Variables
+RG_NAME="raziel-ResearchVnet"
+LOCATION="southeastasia"
+VNET_NAME="ResearchVnet"
+
+# 2. Create the Resource Group
+echo "Creating Resource Group: $RG_NAME..."
+az group create --name $RG_NAME --location $LOCATION
+
+sleep 7
+
+# 3. Create VNet and the first subnet (ResearchSystemSubnet)
+echo "Creating VNet and ResearchSystemSubnet..."
+az network vnet create \
+  --name $VNET_NAME \
+  --resource-group $RG_NAME \
+  --location $LOCATION \
+  --address-prefixes 10.40.0.0/16 \
+  --subnet-name ResearchSystemSubnet \
+  --subnet-prefixes 10.40.0.0/24
+
+echo "Deployment Complete!"
+
